@@ -366,53 +366,58 @@ public class AcidEffect implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent e) {
         //plugin.getLogger().info("DEBUG: " + Settings.allowObsidianScooping);
-        if (!Settings.allowObsidianScooping) {
-            return;
-        }
-        // Check that they are in the ASkyBlock world
-        if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.worldName)) {
-            return;
-        }
-        if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
-            // Only Survival players can do this
-            return;
-        }
-        if (DEBUG)
-            plugin.getLogger().info("DEBUG: obsidian scoop " + e.getEventName());
+        try {
+            if(e != null && e.getPlayer() != null) {
+                if (!Settings.allowObsidianScooping) {
+                    return;
+                }
+                // Check that they are in the ASkyBlock world
+                if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.worldName)) {
+                    return;
+                }
+                if (!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
+                    // Only Survival players can do this
+                    return;
+                }
+                if (DEBUG)
+                    plugin.getLogger().info("DEBUG: obsidian scoop " + e.getEventName());
 
-        if (plugin.getGrid().playerIsOnIsland(e.getPlayer())) {
-            boolean otherOb = false;
-            @SuppressWarnings("deprecation")
-            ItemStack inHand = e.getPlayer().getItemInHand();
-            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && inHand.getType().equals(Material.BUCKET)
-                    && e.getClickedBlock().getType().equals(Material.OBSIDIAN)) {
-                // Look around to see if this is a lone obsidian block
-                Block b = e.getClickedBlock();
-                for (int x = -2; x <= 2; x++) {
-                    for (int y = -2; y <= 2; y++) {
-                        for (int z = -2; z <= 2; z++) {
-                            final Block testBlock = b.getWorld().getBlockAt(b.getX() + x, b.getY() + y, b.getZ() + z);
-                            if ((x != 0 || y != 0 || z != 0) && testBlock.getType().equals(Material.OBSIDIAN)) {
-                                otherOb = true;
+                if (plugin.getGrid().playerIsOnIsland(e.getPlayer())) {
+                    boolean otherOb = false;
+                    @SuppressWarnings("deprecation")
+                    ItemStack inHand = e.getPlayer().getItemInHand();
+                    if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && inHand.getType().equals(Material.BUCKET)
+                            && e.getClickedBlock().getType().equals(Material.OBSIDIAN)) {
+                        // Look around to see if this is a lone obsidian block
+                        Block b = e.getClickedBlock();
+                        for (int x = -2; x <= 2; x++) {
+                            for (int y = -2; y <= 2; y++) {
+                                for (int z = -2; z <= 2; z++) {
+                                    final Block testBlock = b.getWorld().getBlockAt(b.getX() + x, b.getY() + y, b.getZ() + z);
+                                    if ((x != 0 || y != 0 || z != 0) && testBlock.getType().equals(Material.OBSIDIAN)) {
+                                        otherOb = true;
+                                    }
+                                }
                             }
+                        }
+                        if (!otherOb) {
+                            Util.sendMessage(e.getPlayer(), ChatColor.YELLOW + plugin.myLocale(e.getPlayer().getUniqueId()).changingObsidiantoLava);
+                            e.getPlayer().getInventory().setItemInHand(null);
+                            // e.getPlayer().getInventory().removeItem(new
+                            // ItemStack(Material.BUCKET, 1));
+                            e.getPlayer().getInventory().addItem(new ItemStack(Material.LAVA_BUCKET, 1));
+                            if (inHand.getAmount() > 1) {
+                                e.getPlayer().getInventory().addItem(new ItemStack(Material.BUCKET, inHand.getAmount() - 1));
+                            }
+                            e.getPlayer().updateInventory();
+                            e.getClickedBlock().setType(Material.AIR);
+                            e.setCancelled(true);
                         }
                     }
                 }
-                if (!otherOb) {
-                    Util.sendMessage(e.getPlayer(), ChatColor.YELLOW + plugin.myLocale(e.getPlayer().getUniqueId()).changingObsidiantoLava);
-                    e.getPlayer().getInventory().setItemInHand(null);
-                    // e.getPlayer().getInventory().removeItem(new
-                    // ItemStack(Material.BUCKET, 1));
-                    e.getPlayer().getInventory().addItem(new ItemStack(Material.LAVA_BUCKET, 1));
-                    if (inHand.getAmount() > 1) {
-                        e.getPlayer().getInventory().addItem(new ItemStack(Material.BUCKET, inHand.getAmount()-1));
-                    }
-                    e.getPlayer().updateInventory();
-                    e.getClickedBlock().setType(Material.AIR);
-                    e.setCancelled(true);
-                }
             }
-        }
+        } catch (Exception ignored){}
+
     }
 
     /**

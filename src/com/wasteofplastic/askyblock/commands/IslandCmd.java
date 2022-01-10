@@ -951,7 +951,6 @@ public class IslandCmd implements CommandExecutor, TabCompleter {
                 } else {
                     Util.sendMessage(asker, ChatColor.YELLOW + plugin.myLocale(asker.getUniqueId()).islandresetWait.replace("[time]", String.valueOf(getLevelWaitTime(asker))));
                 }
-
             } else {
                 // Asking for the level of another player
                 Util.sendMessage(asker, ChatColor.GREEN + plugin.myLocale(asker.getUniqueId()).islandislandLevelis.replace("[level]", String.valueOf(plugin.getPlayers().getIslandLevel(targetPlayer))));

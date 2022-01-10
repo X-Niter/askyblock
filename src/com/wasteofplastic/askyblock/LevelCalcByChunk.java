@@ -112,7 +112,12 @@ public class LevelCalcByChunk {
         // Run async task to scan chunks
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             for (ChunkSnapshot chunk: chunkSnapshot) {
-                scanChunk(chunk);
+                try {
+                    scanChunk(chunk);
+                } catch(Exception e){
+                    plugin.getLogger().info(island.getOwner() + " " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
             // Nothing happened, change state
             checking = true;
@@ -135,7 +140,8 @@ public class LevelCalcByChunk {
                 }
 
                 for (int y = 0; y < island.getCenter().getWorld().getMaxHeight(); y++) {
-                    Material blockType = Material.getMaterial(chunk.getBlockTypeId(x, y, z));
+//                    Material blockType = Material.getMaterial(chunk.getBlockTypeId(x, y, z));
+                    Material blockType = Material.getMaterial(chunk.getBlockType(x,y,z).name());
                     boolean belowSeaLevel = Settings.seaHeight > 0 && y <= Settings.seaHeight;
                     // Air is free
                     if (!blockType.equals(Material.AIR)) {
@@ -149,15 +155,23 @@ public class LevelCalcByChunk {
     private void checkBlock(Material type, int blockData, boolean belowSeaLevel) {
         // Currently, there is no alternative to using block data (Feb 2018)
         @SuppressWarnings("deprecation")
-        MaterialData md = new MaterialData(type, (byte) blockData);
-        int count = limitCount(md);
-        if (count != 0) {
-            if (belowSeaLevel) {
-                result.underWaterBlockCount += count;
-                result.uwCount.add(md);
-            } else {
-                result.rawBlockCount += count;
-                result.mdCount.add(md);
+        MaterialData md = null;
+
+        try {
+            md = new MaterialData(type, (byte) blockData);
+        } catch (Exception e){
+            plugin.getLogger().severe(e.toString());
+        }
+        if(md != null){
+            int count = limitCount(md);
+            if (count != 0) {
+                if (belowSeaLevel) {
+                    result.underWaterBlockCount += count;
+                    result.uwCount.add(md);
+                } else {
+                    result.rawBlockCount += count;
+                    result.mdCount.add(md);
+                }
             }
         }
     }
