@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import com.wasteofplastic.askyblock.events.*;
+import net.minecraft.server.v1_12_R1.BiomeHell;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
@@ -93,15 +94,15 @@ import com.wasteofplastic.askyblock.util.VaultHelper;
 public class IslandCmd implements CommandExecutor, TabCompleter {
     private static final boolean DEBUG = false;
     public boolean levelCalcFreeFlag = true;
-    private static HashMap<String, Schematic> schematics = new HashMap<>();
-    private ASkyBlock plugin;
+    private static final HashMap<String, Schematic> schematics = new HashMap<>();
+    private final ASkyBlock plugin;
     // The island reset confirmation
-    private HashMap<UUID, Boolean> confirm = new HashMap<>();
+    private final HashMap<UUID, Boolean> confirm = new HashMap<>();
     // Last island
     Location last = null;
     // List of players in the middle of choosing an island schematic
-    private Set<UUID> pendingNewIslandSelection = new HashSet<UUID>();
-    private Set<UUID> resettingIsland = new HashSet<UUID>();
+    private final Set<UUID> pendingNewIslandSelection = new HashSet<UUID>();
+    private final Set<UUID> resettingIsland = new HashSet<UUID>();
     /**
      * Invite list - invited player name string (key), inviter name string
      * (value)
@@ -110,22 +111,21 @@ public class IslandCmd implements CommandExecutor, TabCompleter {
     private final HashMap<UUID, UUID> coopInviteList = new HashMap<>();
     // private PlayerCache players;
     // The time a player has to wait until they can reset their island again
-    private HashMap<UUID, Long> resetWaitTime = new HashMap<>();
+    private final HashMap<UUID, Long> resetWaitTime = new HashMap<>();
     // Level calc cool down
-    private HashMap<UUID, Long> levelWaitTime = new HashMap<>();
+    private final HashMap<UUID, Long> levelWaitTime = new HashMap<>();
 
     // Level calc checker
     BukkitTask checker = null;
     // To choose an island randomly
     private final Random random = new Random();
-    private HashMap<UUID, Location> islandSpot = new HashMap<>();
-    private List<UUID> leavingPlayers = new ArrayList<>();
+    private final HashMap<UUID, Location> islandSpot = new HashMap<>();
+    private final List<UUID> leavingPlayers = new ArrayList<>();
     private boolean creatingTopTen;
 
     /**
      * Constructor
      *
-     * @param aSkyBlock
      */
     public IslandCmd(ASkyBlock aSkyBlock) {
         // Plugin instance
@@ -229,7 +229,7 @@ public class IslandCmd implements CommandExecutor, TabCompleter {
             schematics.get("nether").setName("NetherBlock Island");
             schematics.get("nether").setDescription("Nether Island");
             schematics.get("nether").setPartnerName("default");
-            schematics.get("nether").setBiome(Biome.HELL);
+            schematics.get("nether").setBiome(Biome.NETHER_WASTES);
             schematics.get("nether").setIcon(Material.NETHERRACK);
             schematics.get("nether").setVisible(false);
             schematics.get("nether").setPasteEntities(true);

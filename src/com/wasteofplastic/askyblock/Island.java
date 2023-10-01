@@ -628,13 +628,13 @@ public class Island {
 
     /**
      * @param owner
-     *            the owner to set
+     * the owner to set
      */
     public void setOwner(UUID owner) {
         this.owner = owner;
-        //if (owner == null) {
-        //    Bukkit.getLogger().info("DEBUG: island owner set to null for " + center);
-        //}
+        if (owner == null) {
+            Bukkit.getLogger().info("DEBUG: island owner set to null for " + center);
+        }
     }
 
     /**
@@ -887,8 +887,8 @@ public class Island {
                     if (onIsland(holder.getLocation())) {
                         if (holder.getType() == material) {
                             result++;
-                        } else if (material.equals(Material.REDSTONE_COMPARATOR_OFF)) {
-                            if (holder.getType().equals(Material.REDSTONE_COMPARATOR_ON)) {
+                        } else if (material.equals(Material.LEGACY_REDSTONE_COMPARATOR_OFF)) {
+                            if (holder.getType().equals(Material.LEGACY_REDSTONE_COMPARATOR_ON)) {
                                 result++;
                             }
                         } else if (material.equals(Material.FURNACE)) {

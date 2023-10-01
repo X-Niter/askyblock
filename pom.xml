@@ -12,20 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<server.jars>${project.basedir}/lib</server.jars>
 	</properties>
-	<!-- Ignore or delete the distribution management part of this POM if you 
-		are not tastybento! -->
-	<distributionManagement>
-        <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.org/repository/maven-snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>codemc-releases</id>
-            <url>https://repo.codemc.org/repository/maven-releases</url>
-        </repository>
-	</distributionManagement>
 	<build>
 		<defaultGoal>clean package install</defaultGoal>
 		<finalName>askyblock</finalName>
@@ -91,7 +78,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.6.0</version>
 				<configuration>
 					<additionalJOption>-Xdoclint:none</additionalJOption>
 				</configuration>
@@ -107,79 +94,49 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>1.12.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>authlib</artifactId>
+			<version>1.5.21</version>
+			<scope>provided</scope>
+		</dependency> -->
+		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>VaultAPI</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/Vault-1.6.7.jar</systemPath>
+			<artifactId>Vault</artifactId>
+			<scope>provided</scope>
 			<version>1.6.7</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldguard</artifactId>
-			<version>LATEST</version>
+			<groupId>com.sk89q.worldguard</groupId>
+			<artifactId>worldguard-legacy</artifactId>
+			<version>6.2</version>
 			<scope>provided</scope>
-			<type>jar</type>
 		</dependency>
-		<!-- These server binaries have to be provided by you and put in the server.jars 
-			folder You can build the latest versions using the BuildTools.jar tool from 
-			spigotmc.org. If you do not have or do not need a server version, delete 
-			the reference here and delete the corresponding package in the source code 
-			starting with com.wasteofplastic.askyblock.nms. -->
 		<dependency>
-			<groupId>bukkit.org</groupId>
+			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
+			<version>1.12.2</version>
 			<scope>system</scope>
-			<systemPath>${server.jars}/craftbukkit-1.8.3.jar</systemPath>
-			<version>1.8.3</version>
+			<systemPath>D:/SpigotBuildTools/craftbukkit-1.12.2.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot-1.12</artifactId>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.12.2</version>
 			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.12.jar</systemPath>
-			<version>1.12</version>
-		</dependency>
-		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot-1.11</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.11.jar</systemPath>
-			<version>1.11</version>
-		</dependency>
-		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot-1.9</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.9.jar</systemPath>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot-1.8</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.8.jar</systemPath>
-			<version>1.8</version>
-		</dependency>
-		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot.1.8.3</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.8.3.jar</systemPath>
-			<version>1.8.3</version>
-		</dependency>
-		<dependency>
-			<groupId>spigotmc.org</groupId>
-			<artifactId>spigot.1.8.8</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/spigot-1.8.8.jar</systemPath>
-			<version>1.8.8</version>
+			<systemPath>D:/SpigotBuildTools/spigot-1.12.2.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<repositories>
@@ -188,12 +145,20 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
+			<id>spigotmc-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
 			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+			<url>https://nexus.hc.to/content/repositories/pub_releases</url>
 		</repository>
 		<repository>
 			<id>worldedit-repo</id>
-			<url>http://maven.sk89q.com/repo/</url>
+			<url>https://maven.sk89q.com/repo/</url>
+		</repository>
+		<repository>
+			<id>sk89q-repo</id>
+			<url>https://maven.enginehub.org/repo/</url>
 		</repository>
 	</repositories>
 	<version>3.0.9.4</version>
